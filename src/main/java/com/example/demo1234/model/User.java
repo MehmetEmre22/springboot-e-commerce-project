@@ -1,20 +1,29 @@
 package com.example.demo1234.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "app_user")  // Changed from 'user' to 'app_user'
+ // Changed from 'user' to 'app_user'
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_name",nullable = false,unique = false)
+    @Column(nullable = false, unique = false)
     private String username;
 
-    @Column(name="email",nullable = false,unique = true)
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false,unique = true)
     private String email;
 
 
