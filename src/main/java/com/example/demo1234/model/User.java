@@ -1,5 +1,6 @@
 package com.example.demo1234.model;
 
+import com.example.demo1234.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
  // Changed from 'user' to 'app_user'
+@Table(name="user_app")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,10 @@ public class User {
 
     @Column(nullable = false,unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
 
 }
