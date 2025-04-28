@@ -3,22 +3,23 @@ package com.example.demo1234.controller;
 import com.example.demo1234.dto.DtoBook;
 import com.example.demo1234.dto.DtoBookIU;
 import com.example.demo1234.service.BookService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/book")
 public class BookController {
     private final BookService bookService;
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     @GetMapping("/get-all-product")
     public List<DtoBook> getAll() {
         return bookService.getAll();
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/save-product")
     public DtoBook save(@RequestBody DtoBookIU dtoBookIU){
         return  bookService.save(dtoBookIU);
