@@ -1,6 +1,6 @@
 package com.example.demo1234.controller;
 
-import com.example.demo1234.model.Order;
+import com.example.demo1234.dto.OrderResponse;
 import com.example.demo1234.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,15 +22,16 @@ public class OrderController {
     }
 
     @GetMapping("/my-orders")
-    public List<Order> getUserOrders() {
+    public List<OrderResponse> getUserOrders() {
         return orderService.getUserOrders();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all-orders")
-    public List<Order> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {
         return orderService.getAllOrders();
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/approve/{orderId}")
     public String approveOrder(@PathVariable Long orderId) {
@@ -45,4 +46,15 @@ public class OrderController {
         return "Order rejected successfully!";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/approved-orders")
+    public List<OrderResponse> getApprovedOrders() {
+        return orderService.getApprovedOrders();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/rejected-orders")
+    public List<OrderResponse> getRejectedOrders() {
+        return orderService.getRejectedOrders();
+    }
 }
