@@ -1,14 +1,26 @@
-# Use an OpenJDK image
-FROM openjdk:21-jdk-slim
+# Use Maven image to build the app
+FROM maven:3.9.5-eclipse-temurin-21 AS builder
 
-# Set working directory inside container
 WORKDIR /app
 
-# Copy target jar (after build) into the container
-COPY target/*.jar app.jar
+# Copy pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Expose the port your app will run on
+# Copy source code
+COPY src ./src
+
+# Package the app
+RUN mvn package -DskipTests
+
+# Now use a smaller JDK image to run the app
+FROM openjdk:21-jdk-slim
+
+WORKDIR /app
+
+# Copy the jar from the builder stage
+COPY --from=builder /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Command to run your app
 ENTRYPOINT ["java", "-jar", "app.jar"]
