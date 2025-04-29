@@ -22,7 +22,7 @@ public class CartController {
     }
 
     @GetMapping("/get")
-    public List<CartItemResponse> getCartItems() {
+    public List<CartItemResponse>  getCartItems() {
         return cartService.getCartItems();
     }
 

@@ -14,13 +14,13 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping("/get-all-product")
+    @GetMapping("/get-all-book")
     public List<DtoBook> getAll() {
         return bookService.getAll();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/save-product")
+    @PostMapping("/save-book")
     public DtoBook save(@RequestBody DtoBookIU dtoBookIU){
         return  bookService.save(dtoBookIU);
     }
