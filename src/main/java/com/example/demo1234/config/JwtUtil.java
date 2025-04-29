@@ -10,22 +10,28 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey"; // 🔥 En az 256 bit uzunluğunda olmalı
-    private static final long EXPIRATION_TIME = 86400000; // 1 gün (milisaniye cinsinden)
+    private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey"; // 256 bit uzunluğunda olmalı
+    private static final long EXPIRATION_TIME = 86400000; // 1 gün
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    public String generateToken(String username) {
+    // 🔥 Şu an 2 parametre alıyor: username + role
+    public String generateToken(String username, String role) {
         return Jwts.builder()
-                .setSubject(username) // Kullanıcı kimliği
-                .setIssuedAt(new Date()) // Üretilme zamanı
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Geçerlilik süresi
-                .signWith(key, SignatureAlgorithm.HS256) // İmzalama
+                .setSubject(username)
+                .claim("role", role) // 🎯 Rolü ekliyoruz
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String extractUsername(String token) {
         return parseToken(token).getBody().getSubject();
+    }
+
+    public String extractRole(String token) {
+        return parseToken(token).getBody().get("role", String.class);
     }
 
     public boolean validateToken(String token) {

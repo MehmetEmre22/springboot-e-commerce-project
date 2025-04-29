@@ -1,27 +1,30 @@
 package com.example.demo1234.service;
 
-import com.example.demo1234.dto.RegisterRequest;
-import com.example.demo1234.enums.Role;
+import com.example.demo1234.config.JwtUtil;
 import com.example.demo1234.model.User;
 import com.example.demo1234.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public void register(RegisterRequest request) {
-        User user = User.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())) // şifre encode edilir
-                .role(Role.ROLE_CUSTOMER)
-                .build();
-        userRepository.save(user);
+    public String login(String email, String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return jwtUtil.generateToken(user.getEmail(), user.getRole().name());
     }
-
 }
