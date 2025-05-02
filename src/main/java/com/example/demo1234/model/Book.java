@@ -15,30 +15,30 @@ public class Book {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "isbn", unique = true, nullable = false)
+    @Column(name = "isbn", unique = true)
     private Long isbn;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "author", nullable = false)
+    @Column(name = "author")
     private String author;
 
-    @Column(name = "category", nullable = false)
+    @Column(name = "category")
     private String category;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity" )
     private Integer quantity;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image")
     private String image;
 
-    @Column(name = "publisher", nullable = false)
+    @Column(name = "publisher")
     private String publisher;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Double price;
 }

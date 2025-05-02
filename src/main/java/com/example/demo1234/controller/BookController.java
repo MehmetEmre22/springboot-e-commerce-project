@@ -1,7 +1,6 @@
 package com.example.demo1234.controller;
 
 import com.example.demo1234.dto.DtoBook;
-import com.example.demo1234.dto.DtoBookIU;
 import com.example.demo1234.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +20,19 @@ public class BookController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/save-book")
-    public DtoBook save(@RequestBody DtoBookIU dtoBookIU){
-        return  bookService.save(dtoBookIU);
+    public DtoBook save(@RequestBody DtoBook dtoBook){
+        return  bookService.save(dtoBook);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping("/update-book/{isbn}")
+    public DtoBook updateBookByIsbn(@PathVariable Long isbn, @RequestBody DtoBook dtoBook) {
+        return bookService.updateByIsbn(isbn, dtoBook);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete-book/{isbn}")
+    public void deleteBookByIsbn(@PathVariable Long isbn) {
+        bookService.deleteByIsbn(isbn);
+    }
+
+
 }

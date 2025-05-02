@@ -113,6 +113,13 @@ public class OrderService {
                 .collect(Collectors.toList());
         return mapOrdersToOrderResponses(orders);
     }
+    public List<OrderResponse> getPendingOrders() {
+        List<Order> orders = orderRepository.findAll()
+                .stream()
+                .filter(order -> order.getStatus() == OrderStatus.PENDING)
+                .collect(Collectors.toList());
+        return mapOrdersToOrderResponses(orders);
+    }
 
     @Transactional
     public void approveOrder(Long orderId) {

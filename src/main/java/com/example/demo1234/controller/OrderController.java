@@ -57,4 +57,9 @@ public class OrderController {
     public List<OrderResponse> getRejectedOrders() {
         return orderService.getRejectedOrders();
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/pending-orders")
+    public List<OrderResponse> getPendingOrders() {
+        return orderService.getPendingOrders();
+    }
 }

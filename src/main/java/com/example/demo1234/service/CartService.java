@@ -24,51 +24,44 @@ public class CartService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    @Transactional
-    public void addToCart(Long bookId, Integer quantity) {
+    private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Transactional
+    public void addToCart(Long bookId, Integer quantity) {
+        User user = getCurrentUser();
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
-        // 🔥 Önce bu kullanıcı ve bu kitap için daha önce sepette ürün var mı kontrol ediyoruz
-        List<CartItem> existingCartItems = cartItemRepository.findByUser(user)
-                .stream()
-                .filter(item -> item.getBook().getId().equals(book.getId()))
-                .toList();
+        // Aynı kitap zaten sepette var mı?
+        CartItem cartItem = cartItemRepository.findByUser(user).stream()
+                .filter(item -> item.getBook().getId().equals(bookId))
+                .findFirst()
+                .orElse(null);
 
-        if (!existingCartItems.isEmpty()) {
-            // Varsa ➔ quantity artır
-            CartItem cartItem = existingCartItems.get(0);
+        if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartItemRepository.save(cartItem);
         } else {
-            // Yoksa ➔ yeni kayıt oluştur
-            CartItem cartItem = CartItem.builder()
+            cartItem = CartItem.builder()
                     .user(user)
                     .book(book)
                     .quantity(quantity)
                     .build();
-            cartItemRepository.save(cartItem);
         }
+
+        cartItemRepository.save(cartItem);
     }
 
-
     public List<CartItemResponse> getCartItems() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        User user = getCurrentUser();
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<CartItem> cartItems = cartItemRepository.findByUser(user);
-
-        // 🔥 CartItem nesnelerini CartItemResponse DTO'suna çeviriyoruz
-        return cartItems.stream()
+        return cartItemRepository.findByUser(user).stream()
                 .map(cartItem -> new CartItemResponse(
                         cartItem.getId(),
                         cartItem.getBook().getTitle(),
@@ -83,17 +76,17 @@ public class CartService {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new RuntimeException("Cart item not found"));
 
-        cartItemRepository.delete(cartItem);
+        if (cartItem.getQuantity() > 1) {
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+            cartItemRepository.save(cartItem);
+        } else {
+            cartItemRepository.delete(cartItem);
+        }
     }
 
     @Transactional
     public void clearCart() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+        User user = getCurrentUser();
         List<CartItem> cartItems = cartItemRepository.findByUser(user);
         cartItemRepository.deleteAll(cartItems);
     }
