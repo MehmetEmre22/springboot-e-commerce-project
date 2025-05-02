@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoBook {
-    private Long id;
     private Long isbn;
     private String title;
     private String author;

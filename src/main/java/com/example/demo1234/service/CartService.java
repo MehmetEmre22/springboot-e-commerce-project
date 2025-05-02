@@ -33,15 +33,15 @@ public class CartService {
     }
 
     @Transactional
-    public void addToCart(Long bookId, Integer quantity) {
+    public void addToCart(Long isbn, Integer quantity) {
         User user = getCurrentUser();
 
-        Book book = bookRepository.findById(bookId)
+        Book book = bookRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
-        // Aynı kitap zaten sepette var mı?
+        // Sepette aynı kitap var mı? (book id üzerinden karşılaştır)
         CartItem cartItem = cartItemRepository.findByUser(user).stream()
-                .filter(item -> item.getBook().getId().equals(bookId))
+                .filter(item -> item.getBook().getId().equals(book.getId()))
                 .findFirst()
                 .orElse(null);
 

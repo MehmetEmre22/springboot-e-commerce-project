@@ -16,8 +16,8 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/add")
-    public String addToCart(@RequestParam Long bookId, @RequestParam Integer quantity) {
-        cartService.addToCart(bookId, quantity);
+    public String addToCart(@RequestParam Long isbn, @RequestParam Integer quantity) {
+        cartService.addToCart(isbn, quantity);
         return "Book added to cart successfully!";
     }
 
