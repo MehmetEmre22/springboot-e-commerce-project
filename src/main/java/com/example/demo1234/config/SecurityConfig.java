@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 Artık Session yok
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // 🔥 /auth/login ve /auth/register serbest
-                        .requestMatchers("/book/get-all-book/").permitAll()
+                        .requestMatchers("/book/get-all-book").permitAll()
                         .anyRequest().authenticated() // 🔥 Diğer tüm endpointler Token ister
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 🔥 JWT filtreyi ekle
