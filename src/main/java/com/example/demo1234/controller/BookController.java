@@ -33,6 +33,4 @@ public class BookController {
     public void deleteBookByIsbn(@PathVariable Long isbn) {
         bookService.deleteByIsbn(isbn);
     }
-
-
 }
