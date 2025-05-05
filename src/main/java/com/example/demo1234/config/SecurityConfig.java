@@ -23,8 +23,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                //.csrf(AbstractHttpConfigurer::disable)
-                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                //.csrf(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 Artık Session yok
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // 🔥 /auth/login ve /auth/register serbest
