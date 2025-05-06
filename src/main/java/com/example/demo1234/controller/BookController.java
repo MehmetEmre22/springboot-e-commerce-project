@@ -21,7 +21,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/get-all-book")
     public List<DtoBook> adminGetAll() {
-        return bookService.getAll();
+        return bookService.adminGetAll();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
