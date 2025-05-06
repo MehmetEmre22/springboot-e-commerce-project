@@ -67,6 +67,21 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("username", user.getUsername()));
     }
 
+    @PostMapping("/auth/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        ResponseCookie deleteCookie = ResponseCookie.from("jwt", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0) // delete immediately
+                .sameSite("None")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
+
+        return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
+    }
+
     @GetMapping("/check")
     public ResponseEntity<?> checkLogin(HttpServletRequest request) {
         String token = jwtUtil.getJwtFromRequest(request);
