@@ -29,7 +29,7 @@ public class BookController {
         return bookService.updateByIsbn(isbn, dtoBook);
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete-book/{isbn}")
+    @PutMapping("/delete-book/{isbn}")
     public void deleteBookByIsbn(@PathVariable Long isbn) {
         bookService.deleteByIsbn(isbn);
     }
