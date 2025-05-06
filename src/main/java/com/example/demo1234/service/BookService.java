@@ -30,6 +30,7 @@ public class BookService {
     public List<DtoBook> getAll(){
         return bookRepository.findAll()
                 .stream()
+                .filter(book -> book.getQuantity() > 0)
                 .map(book ->{
                     DtoBook dto =new DtoBook();
                     BeanUtils.copyProperties(book,dto);
@@ -39,7 +40,6 @@ public class BookService {
     public List<DtoBook> AdminGetAll() {
         return bookRepository.findAll()
                 .stream()
-                .filter(book -> book.getQuantity() > 0) // 🔥 quantity 0 olanları filtrele
                 .map(book -> {
                     DtoBook dto = new DtoBook();
                     BeanUtils.copyProperties(book, dto);
