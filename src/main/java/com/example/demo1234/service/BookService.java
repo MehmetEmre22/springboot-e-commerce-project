@@ -36,6 +36,18 @@ public class BookService {
                     return dto;
                 } ).toList();
     }
+    public List<DtoBook> AdminGetAll() {
+        return bookRepository.findAll()
+                .stream()
+                .filter(book -> book.getQuantity() > 0) // 🔥 quantity 0 olanları filtrele
+                .map(book -> {
+                    DtoBook dto = new DtoBook();
+                    BeanUtils.copyProperties(book, dto);
+                    return dto;
+                })
+                .toList();
+    }
+
     @Transactional
     public DtoBook updateByIsbn(Long isbn, DtoBook dtoBook) {
         Book existingBook = bookRepository.findByIsbn(isbn)

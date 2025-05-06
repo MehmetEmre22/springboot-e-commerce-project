@@ -19,15 +19,23 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/get-all-book")
+    public List<DtoBook> adminGetAll() {
+        return bookService.getAll();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/save-book")
     public DtoBook save(@RequestBody DtoBook dtoBook){
         return  bookService.save(dtoBook);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/update-book/{isbn}")
     public DtoBook updateBookByIsbn(@PathVariable Long isbn, @RequestBody DtoBook dtoBook) {
         return bookService.updateByIsbn(isbn, dtoBook);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/delete-book/{isbn}")
     public void deleteBookByIsbn(@PathVariable Long isbn) {
