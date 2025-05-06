@@ -37,7 +37,7 @@ public class BookService {
                     return dto;
                 } ).toList();
     }
-    public List<DtoBook> AdminGetAll() {
+    public List<DtoBook> adminGetAll() {
         return bookRepository.findAll()
                 .stream()
                 .map(book -> {
