@@ -2,14 +2,19 @@ package com.example.demo1234.controller;
 
 import com.example.demo1234.config.JwtUtil;
 import com.example.demo1234.dto.LoginRequest;
-import com.example.demo1234.dto.LoginResponse;
 import com.example.demo1234.dto.RegisterRequest;
 import com.example.demo1234.enums.Role;
 import com.example.demo1234.model.User;
 import com.example.demo1234.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -41,12 +46,23 @@ public class AuthController {
 
     // 🟢 Kullanıcı girişi (login)
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-        return new LoginResponse(token, user.getUsername());
+        ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(24 * 60 * 60) // 1 gün
+                .sameSite("Strict")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        return ResponseEntity.ok(Map.of("username", user.getUsername()));
     }
+
 }
