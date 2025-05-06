@@ -6,9 +6,11 @@ import com.example.demo1234.dto.RegisterRequest;
 import com.example.demo1234.enums.Role;
 import com.example.demo1234.model.User;
 import com.example.demo1234.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,4 +67,13 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("username", user.getUsername()));
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<?> checkLogin(HttpServletRequest request) {
+        String token = jwtUtil.getJwtFromRequest(request);
+        if (token != null && jwtUtil.validateToken(token)) {
+            String username = jwtUtil.extractUsername(token); // Get username from token
+            return ResponseEntity.ok(Map.of("username", username));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+    }
 }
