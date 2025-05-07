@@ -68,7 +68,6 @@ public class AuthController {
                 .body(Map.of("username", user.getUsername()));
     }
 
-
     //log out
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
