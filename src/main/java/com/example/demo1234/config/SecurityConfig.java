@@ -33,10 +33,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // Explicitly wire CORS config here
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 No session
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll() // 🔥 /auth/login and /auth/register are open
-                        .requestMatchers("/book/get-all-book").permitAll()
-                        .anyRequest().authenticated() // 🔥 All other endpoints require Token
+                        //.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        //.requestMatchers("/auth/**").permitAll() // 🔥 /auth/login and /auth/register are open
+                        //.requestMatchers("/book/get-all-book").permitAll()
+                        .anyRequest().permitAll()//.authenticated() // 🔥 All other endpoints require Token
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 🔥 Add JWT filter
                 .build();
