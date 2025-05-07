@@ -60,6 +60,7 @@ public class AuthController {
                 .path("/")
                 .maxAge(24 * 60 * 60) // 1 gün
                 .sameSite("None")
+                .partitioned(true)
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -74,8 +75,9 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(0) // delete immediately
+                .maxAge(0)
                 .sameSite("None")
+                .partitioned(true)
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
