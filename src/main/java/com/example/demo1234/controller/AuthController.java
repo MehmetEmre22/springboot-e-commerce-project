@@ -67,6 +67,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("username", user.getUsername()));
     }
 
+    //log out
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         ResponseCookie deleteCookie = ResponseCookie.from("jwt", "")
