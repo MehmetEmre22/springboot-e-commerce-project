@@ -82,6 +82,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
     }
 
+    //kullanıcı hala logged in mi bak
     @GetMapping("/check")
     public ResponseEntity<?> checkLogin(HttpServletRequest request) {
         String token = jwtUtil.getJwtFromRequest(request);
