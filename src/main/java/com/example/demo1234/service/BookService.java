@@ -30,24 +30,12 @@ public class BookService {
     public List<DtoBook> getAll(){
         return bookRepository.findAll()
                 .stream()
-                .filter(book -> book.getQuantity() > 0)
                 .map(book ->{
                     DtoBook dto =new DtoBook();
                     BeanUtils.copyProperties(book,dto);
                     return dto;
                 } ).toList();
     }
-    public List<DtoBook> adminGetAll() {
-        return bookRepository.findAll()
-                .stream()
-                .map(book -> {
-                    DtoBook dto = new DtoBook();
-                    BeanUtils.copyProperties(book, dto);
-                    return dto;
-                })
-                .toList();
-    }
-
     @Transactional
     public DtoBook updateByIsbn(Long isbn, DtoBook dtoBook) {
         Book existingBook = bookRepository.findByIsbn(isbn)
