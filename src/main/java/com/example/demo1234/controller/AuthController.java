@@ -55,7 +55,7 @@ public class AuthController {
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
-                .httpOnly(true)
+                //.httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(24 * 60 * 60)
@@ -72,7 +72,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
         ResponseCookie deleteCookie = ResponseCookie.from("jwt", "")
-                .httpOnly(true)
+                //.httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(0)
