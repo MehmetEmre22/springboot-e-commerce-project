@@ -2,7 +2,6 @@ package com.example.demo1234.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,30 +29,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        final String header = request.getHeader("Authorization");
         String token = null;
         String username = null;
 
-        // 🔍 Look for the JWT inside cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        // 🕵️ If there's a token, try to extract the username
-        if (token != null) {
+        if (header != null && header.startsWith("Bearer ")) {
+            token = header.substring(7);
             try {
                 username = jwtUtil.extractUsername(token);
             } catch (Exception e) {
-                System.out.println("⛔ Invalid token (cookie): " + e.getMessage());
+                System.out.println("⛔ Geçersiz token: " + e.getMessage());
             }
         }
 
-        // ✅ Validate and authenticate if everything checks out
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
                 String role = jwtUtil.extractRole(token);
@@ -69,7 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        // ➡️ Continue the request flow
         filterChain.doFilter(request, response);
     }
 }

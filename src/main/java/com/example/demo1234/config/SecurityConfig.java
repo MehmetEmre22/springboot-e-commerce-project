@@ -3,7 +3,6 @@ package com.example.demo1234.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -30,18 +29,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults()) // Explicitly wire CORS config here
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 No session
+                .cors(Customizer.withDefaults())
+                //.csrf(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 Artık Session yok
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        //.requestMatchers("/auth/**").permitAll() // 🔥 /auth/login and /auth/register are open
-                        //.requestMatchers("/book/get-all-book").permitAll()
-                        .anyRequest().permitAll()//.authenticated() // 🔥 All other endpoints require Token
+                        .requestMatchers("/auth/**").permitAll() // 🔥 /auth/login ve /auth/register serbest
+                        .requestMatchers("/book/get-all-book").permitAll()
+                        .anyRequest().authenticated() // 🔥 Diğer tüm endpointler Token ister
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 🔥 Add JWT filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 🔥 JWT filtreyi ekle
                 .build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -56,19 +54,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "https://book-shop-rtu0.onrender.com"
-        ));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "https://book-shop-rtu0.onrender.com")); // "*" for testing
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*")); // Explicitly allow headers
-        config.setExposedHeaders(List.of("set-cookie")); // Expose Set-Cookie
-        config.setAllowCredentials(true); // Allow credentials (cookies)
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 
-
 }
+

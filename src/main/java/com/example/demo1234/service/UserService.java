@@ -7,7 +7,6 @@ import com.example.demo1234.model.User;
 import com.example.demo1234.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,10 +35,8 @@ public class UserService {
         User user = userRepository.findByEmail(currentEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        boolean emailChanged = false;
         if (request.getEmail() != null && !request.getEmail().isEmpty()) {
             user.setEmail(request.getEmail());
-            emailChanged = true;
         }
 
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
@@ -47,11 +44,6 @@ public class UserService {
         }
 
         userRepository.save(user);
-
-        if (emailChanged) {
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(user, null, authentication.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(newAuth);
-        }
     }
 
 

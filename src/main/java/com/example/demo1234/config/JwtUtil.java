@@ -2,8 +2,6 @@ package com.example.demo1234.config;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -50,18 +48,5 @@ public class JwtUtil {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-    }
-
-    public String getJwtFromRequest(HttpServletRequest request) {
-        // Look for the 'jwt' cookie (you used "jwt" as the cookie name in the response)
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    return cookie.getValue();  // Return the token value
-                }
-            }
-        }
-        return null;  // Return null if no cookie was found
     }
 }
