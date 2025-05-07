@@ -62,7 +62,7 @@ public class SecurityConfig {
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*")); // Explicitly allow headers
-        config.setExposedHeaders(List.of("Set-Cookie")); // Expose Set-Cookie
+        config.setExposedHeaders(List.of("set-cookie")); // Expose Set-Cookie
         config.setAllowCredentials(true); // Allow credentials (cookies)
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
