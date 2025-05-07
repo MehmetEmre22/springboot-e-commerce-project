@@ -57,9 +57,9 @@ public class SecurityConfig {
                 "http://localhost:5173",
                 "https://book-shop-rtu0.onrender.com"
         ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Explicitly allow headers
-        config.setExposedHeaders(List.of("Authorization", "Set-Cookie")); // Expose Set-Cookie
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedHeaders(List.of("*")); // Explicitly allow headers
+        config.setExposedHeaders(List.of("*")); // Expose Set-Cookie
         config.setAllowCredentials(true); // Allow credentials (cookies)
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
