@@ -48,7 +48,7 @@ public class AuthController {
 
     // 🟢 Kullanıcı girişi (login)
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
 
@@ -58,14 +58,16 @@ public class AuthController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(24 * 60 * 60) // 1 gün
+                .maxAge(24 * 60 * 60)
                 .sameSite("None")
                 .build();
 
-        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-
-        return ResponseEntity.ok(Map.of("username", user.getUsername()));
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of("username", user.getUsername()));
     }
+
 
     //log out
     @PostMapping("/logout")
