@@ -18,11 +18,18 @@ public class BookController {
         return bookService.getAll();
     }
 
+    @GetMapping("/admin/get-all-book")
+    public List<DtoBook> adminGetAll() {
+        return bookService.adminGetAll();
+    }
+
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/save-book")
     public DtoBook save(@RequestBody DtoBook dtoBook){
         return  bookService.save(dtoBook);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/update-book/{isbn}")
     public DtoBook updateBookByIsbn(@PathVariable Long isbn, @RequestBody DtoBook dtoBook) {
