@@ -61,6 +61,6 @@ public class AuthController {
         // 3. Token oluşturuyoruz (email + rol ile)
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-        return new LoginResponse(token);
+        return new LoginResponse(token, user.getRole());
     }
 }
