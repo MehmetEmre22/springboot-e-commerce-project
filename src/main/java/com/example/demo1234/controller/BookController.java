@@ -35,7 +35,7 @@ public class BookController {
     public DtoBook updateBookByIsbn(@PathVariable Long isbn, @RequestBody DtoBook dtoBook) {
         return bookService.updateByIsbn(isbn, dtoBook);
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/delete-book/{isbn}")
     public void deleteBookByIsbn(@PathVariable Long isbn) {
         bookService.deleteByIsbn(isbn);
