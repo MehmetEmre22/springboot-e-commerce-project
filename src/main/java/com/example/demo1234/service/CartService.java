@@ -72,9 +72,18 @@ public class CartService {
     }
 
     @Transactional
-    public void removeFromCart(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+    public void removeFromCart(Long isbn) {
+        User user = getCurrentUser();
+
+        Book book = bookRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        CartItem cartItem = cartItemRepository
+                .findByUser(user)
+                .stream()
+                .filter(item -> item.getBook().getId().equals(book.getId()))
+                .findFirst()
+                .orElse(null);
 
         if (cartItem.getQuantity() > 1) {
             cartItem.setQuantity(cartItem.getQuantity() - 1);
