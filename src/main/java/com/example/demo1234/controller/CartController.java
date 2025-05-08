@@ -27,8 +27,8 @@ public class CartController {
     }
 
     @PostMapping("/remove")
-    public String removeFromCart(@RequestParam Long cartItemId) {
-        cartService.removeFromCart(cartItemId);
+    public String removeFromCart(@RequestParam Long isbn) {
+        cartService.removeFromCart(isbn);
         return "Item removed from cart successfully!";
     }
 
