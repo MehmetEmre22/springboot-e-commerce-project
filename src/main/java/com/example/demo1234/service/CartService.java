@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,13 +40,13 @@ public class CartService {
         Book book = bookRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
-        CartItem cartItem = cartItemRepository.findByUser(user).stream()
-                .filter(item -> item.getBook().getIsbn().equals(book.getIsbn()))
-                .findFirst()
-                .orElse(null);
+        Optional<CartItem> optionalItem = cartItemRepository.findByUserAndBook(user, book);
 
-        if (cartItem != null) {
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        CartItem cartItem;
+
+        if (optionalItem.isPresent()) {
+            cartItem = optionalItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + quantity); // JPA will update
         } else {
             cartItem = CartItem.builder()
                     .user(user)
@@ -54,8 +55,9 @@ public class CartService {
                     .build();
         }
 
-        cartItemRepository.save(cartItem);
+        cartItemRepository.save(cartItem); // Will insert or update based on entity state
     }
+
 
     public List<CartItemResponse> getCartItems() {
         User user = getCurrentUser();
