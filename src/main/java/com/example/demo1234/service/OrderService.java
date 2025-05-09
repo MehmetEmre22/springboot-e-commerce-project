@@ -150,9 +150,9 @@ public class OrderService {
                     order.getId(),
                     order.getTotalPrice(),
                     order.getCreatedAt(),
+                    order.getStatus().name(),      // 🔥 Sipariş durumu
                     order.getUser().getUsername(), // 🔥 Kullanıcının adı
                     order.getUser().getEmail(),    // 🔥 Kullanıcının emaili
-                    order.getStatus().name(),      // 🔥 Sipariş durumu
                     items                          // 🔥 Ürünler
             );
         }).toList();
