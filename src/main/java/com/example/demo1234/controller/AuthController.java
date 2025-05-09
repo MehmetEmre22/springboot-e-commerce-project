@@ -26,7 +26,7 @@ public class AuthController {
 
     // 🟢 Kullanıcı kaydı (register)
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
+    public LoginResponse register(@RequestBody RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Bu email zaten kayıtlı.");
         }
@@ -40,7 +40,9 @@ public class AuthController {
 
         userRepository.save(user);
 
-        return "User registered successfully!";
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+
+        return new LoginResponse(token);
     }
 
     // 🟢 Kullanıcı girişi (login)
