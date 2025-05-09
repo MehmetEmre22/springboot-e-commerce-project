@@ -39,9 +39,8 @@ public class CartService {
         Book book = bookRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
-        // Sepette aynı kitap var mı? (book id üzerinden karşılaştır)
         CartItem cartItem = cartItemRepository.findByUser(user).stream()
-                .filter(item -> item.getBook().getId().equals(book.getId()))
+                .filter(item -> item.getBook().getIsbn().equals(book.getIsbn()))
                 .findFirst()
                 .orElse(null);
 
@@ -84,6 +83,7 @@ public class CartService {
                 .findFirst()
                 .orElse(null);
 
+        assert cartItem != null;
         if (cartItem.getQuantity() > 1) {
             cartItem.setQuantity(cartItem.getQuantity() - 1);
             cartItemRepository.save(cartItem);
