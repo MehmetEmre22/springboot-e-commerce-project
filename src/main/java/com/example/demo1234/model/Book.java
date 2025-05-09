@@ -30,10 +30,10 @@ public class Book {
     @Column(name = "quantity" )
     private Integer quantity;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "image")
+    @Column(name = "image", length = 1000)
     private String image;
 
     @Column(name = "publisher")
