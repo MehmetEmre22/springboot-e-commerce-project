@@ -64,9 +64,7 @@ public class CartService {
         return cartItemRepository.findByUser(user).stream()
                 .map(cartItem -> new CartItemResponse(
                         cartItem.getId(),
-                        cartItem.getBook().getTitle(),
-                        cartItem.getBook().getPrice(),
-                        cartItem.getQuantity()
+                        cartItem.getBook()
                 ))
                 .collect(Collectors.toList());
     }

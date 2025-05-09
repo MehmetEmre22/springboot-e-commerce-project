@@ -1,5 +1,6 @@
 package com.example.demo1234.dto;
 
+import com.example.demo1234.model.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -7,7 +8,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class CartItemResponse {
     private Long cartItemId;
-    private String bookTitle;
-    private Double bookPrice;
-    private Integer quantity;
+    private Book book;
 }
