@@ -15,7 +15,7 @@ public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    // 🔥 Şu an 2 parametre alıyor: username + role
+
     public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)

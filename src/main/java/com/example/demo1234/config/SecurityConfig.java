@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> corsConfigurationSource())
                 //.csrf(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 Artık Session yok
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Session yok.
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // /auth/login ve /auth/register serbest.
                         .requestMatchers("/book/get-all-book").permitAll()
