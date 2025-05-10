@@ -31,5 +31,5 @@ public class Order {
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status; // 🔥 Siparişin durumu: PENDING, APPROVED, REJECTED
+    private OrderStatus status;
 }

@@ -37,16 +37,16 @@ public class CartService {
     public void addToCart(Long isbn, Integer quantity) {
         User user = getCurrentUser();
 
-        Book book = bookRepository.findByIsbn(isbn)
+        Book book = bookRepository.findByIsbn(isbn)//Eklenecek kitabın varlığının kontrolü.
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
         Optional<CartItem> optionalItem = cartItemRepository.findByUserAndBook(user, book);
-
+        //Aynı kitap,aynı user'ın sepetindeyse repodan alınır.
         CartItem cartItem;
 
-        if (optionalItem.isPresent()) {
-            cartItem = optionalItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + quantity); // JPA will update
+        if (optionalItem.isPresent()) {//optionelItem'ın içinde aynı kitap varsa true döner.
+            cartItem = optionalItem.get();//Yani aynı kitap varsa miktar arttırılır.
+            cartItem.setQuantity(cartItem.getQuantity() + quantity); //
         } else {
             cartItem = CartItem.builder()
                     .user(user)
@@ -55,7 +55,7 @@ public class CartService {
                     .build();
         }
 
-        cartItemRepository.save(cartItem); // Will insert or update based on entity state
+        cartItemRepository.save(cartItem); // Sepeti güncelle.
     }
 
 
@@ -68,7 +68,7 @@ public class CartService {
                         cartItem.getBook(),
                         cartItem.getQuantity()
                 ))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());//toList()'te olabilir.
     }
 
     @Transactional

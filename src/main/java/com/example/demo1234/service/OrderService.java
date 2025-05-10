@@ -40,7 +40,7 @@ public class OrderService {
         }
 
         for (CartItem cartItem : cartItems) {
-            Book book = cartItem.getBook();
+            Book book = cartItem.getBook();//Sepetteki miktar stoktan azsa sipariş verilmez.
             if (book.getQuantity() < cartItem.getQuantity()) {
                 throw new RuntimeException("Not enough stock for book: " + book.getTitle());
             }
@@ -50,22 +50,22 @@ public class OrderService {
         double totalPrice = 0.0;
 
         for (CartItem cartItem : cartItems) {
-            Book book = cartItem.getBook();
-            book.setQuantity(book.getQuantity() - cartItem.getQuantity());
-            bookRepository.save(book);
+            Book book = cartItem.getBook();//Sepetteki kitapları topla
+            book.setQuantity(book.getQuantity() - cartItem.getQuantity());//Sipariş verilen miktarda stoktan düş.
+            bookRepository.save(book);//DB'ye kaydedet.
 
-            OrderItem orderItem = OrderItem.builder()
+            OrderItem orderItem = OrderItem.builder()//Tüm kitaplarla order item oluştur.
                     .book(book)
                     .quantity(cartItem.getQuantity())
                     .price(book.getPrice())
                     .build();
 
-            orderItems.add(orderItem);
+            orderItems.add(orderItem);//Oluşturulan OrderItemleri bir listede topla
 
             totalPrice += book.getPrice() * cartItem.getQuantity();
         }
 
-        Order order = Order.builder()
+        Order order = Order.builder()//Tüm bu işlemleri bir orderda topla.
                 .user(user)
                 .orderItems(orderItems)
                 .totalPrice(totalPrice)
@@ -73,15 +73,15 @@ public class OrderService {
                 .status(OrderStatus.PENDING)
                 .build();
 
-        for (OrderItem orderItem : orderItems) {
+        for (OrderItem orderItem : orderItems) {//Orderitemleri order'a bağla.
             orderItem.setOrder(order);
         }
 
-        orderRepository.save(order);
-        cartItemRepository.deleteAll(cartItems);
+        orderRepository.save(order);//order ı kaydet.
+        cartItemRepository.deleteAll(cartItems);//Cartitemlere gerek kalmadığı için sil.
     }
 
-    public List<OrderResponse> getUserOrders() {
+    public List<OrderResponse> getUserOrders() {//Kullanıcının orderları
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
@@ -93,7 +93,7 @@ public class OrderService {
         return mapOrdersToOrderResponses(orders);
     }
 
-    public List<OrderResponse> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {//Admin için tüm orderlar
         List<Order> orders = orderRepository.findAll();
         return mapOrdersToOrderResponses(orders);
     }
@@ -138,8 +138,11 @@ public class OrderService {
     }
 
     private List<OrderResponse> mapOrdersToOrderResponses(List<Order> orders) {
-        return orders.stream().map(order -> {
-            List<OrderItemResponse> items = order.getOrderItems().stream().map(orderItem ->
+        return orders.stream().map(order -> {//Orderları orderResponse çevirme
+            List<OrderItemResponse> items = order
+                    .getOrderItems()
+                    .stream()
+                    .map(orderItem ->
                     new OrderItemResponse(
                             orderItem.getBook().getTitle(),
                             orderItem.getQuantity(),
@@ -150,10 +153,10 @@ public class OrderService {
                     order.getId(),
                     order.getTotalPrice(),
                     order.getCreatedAt(),
-                    order.getStatus().name(),      // 🔥 Sipariş durumu
-                    order.getUser().getUsername(), // 🔥 Kullanıcının adı
-                    order.getUser().getEmail(),    // 🔥 Kullanıcının emaili
-                    items                          // 🔥 Ürünler
+                    order.getStatus().name(),
+                    order.getUser().getUsername(),
+                    order.getUser().getEmail(),
+                    items
             );
         }).toList();
     }

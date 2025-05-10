@@ -19,11 +19,11 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user; // Hangi kullanıcıya ait
+    private User user; // Hangi kullanıcıya ait.
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Book book; // Hangi ürüne ait
+    private Book book; // Hangi ürüne ait.
 
     private Integer quantity;
 }

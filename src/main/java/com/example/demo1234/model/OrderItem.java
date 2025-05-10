@@ -17,13 +17,13 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order; // Hangi siparişe bağlı
+    private Order order; // Hangi siparişe bağlı.
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Book book; // Hangi ürün
+    private Book book; // Hangi ürün.
 
     private Integer quantity;
 
-    private Double price; // O anki ürün fiyatı
+    private Double price; // O anki ürün fiyatı.
 }
