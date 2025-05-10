@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.extractUsername(token);
             } catch (Exception e) {
-                System.out.println("⛔ Geçersiz token: " + e.getMessage());
+                System.out.println(" Geçersiz token: " + e.getMessage());
             }
         }
 

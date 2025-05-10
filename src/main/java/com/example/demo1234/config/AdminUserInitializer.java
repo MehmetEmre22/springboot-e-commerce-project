@@ -27,9 +27,9 @@ public class AdminUserInitializer {
                         .role(Role.ROLE_ADMIN)
                         .build();
                 userRepository.save(admin);
-                System.out.println("✅ Admin kullanıcı başarıyla oluşturuldu.");
+                System.out.println(" Admin kullanıcı başarıyla oluşturuldu.");
             } else {
-                System.out.println("ℹ️ Admin kullanıcı zaten mevcut.");
+                System.out.println("ℹ Admin kullanıcı zaten mevcut.");
             }
         };
     }

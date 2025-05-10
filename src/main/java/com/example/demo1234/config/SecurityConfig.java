@@ -34,12 +34,12 @@ public class SecurityConfig {
                 //.csrf(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 🔥 Artık Session yok
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // 🔥 /auth/login ve /auth/register serbest
+                        .requestMatchers("/auth/**").permitAll() // /auth/login ve /auth/register serbest.
                         .requestMatchers("/book/get-all-book").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().authenticated() // 🔥 Diğer tüm endpointler Token ister
+                        .anyRequest().authenticated() //  Diğer tüm endpointler Token ister.
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // 🔥 JWT filtreyi ekle
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //  JWT filtreyi ekle.
                 .build();
     }
 

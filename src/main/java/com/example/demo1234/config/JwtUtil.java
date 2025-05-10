@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey"; // 256 bit uzunluğunda olmalı
+    private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey";
     private static final long EXPIRATION_TIME = 86400000; // 1 gün
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -19,7 +19,7 @@ public class JwtUtil {
     public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
-                .claim("role", role) // 🎯 Rolü ekliyoruz
+                .claim("role", role) //Rolü ekliyoruz.
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)

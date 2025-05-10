@@ -13,7 +13,7 @@ public class OrderResponse {
     private Double totalPrice;
     private LocalDateTime createdAt;
     private String status;
-    private String username;  // 🔥 Siparişi veren kullanıcının adı
-    private String email;     // 🔥 Siparişi veren kullanıcının emaili
+    private String username;  //  Siparişi veren kullanıcının adı.
+    private String email;     //  Siparişi veren kullanıcının emaili.
     private List<OrderItemResponse> items;
 }

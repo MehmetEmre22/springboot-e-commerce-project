@@ -19,7 +19,7 @@ public class AuthService {
 
     public String login(String email, String password) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
+                new UsernamePasswordAuthenticationToken(email, password)//basic auth için login
         );
 
         User user = userRepository.findByEmail(email)
