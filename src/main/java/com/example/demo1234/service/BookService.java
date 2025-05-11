@@ -72,7 +72,7 @@ public class BookService {
         Book book = bookRepository.findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found with ISBN: " + isbn));
 
-        book.setQuantity(0); // 🔥 Quantity sıfırlandı
+        book.setQuantity(0); //  Quantity sıfırlandı
         bookRepository.save(book);
     }
 
