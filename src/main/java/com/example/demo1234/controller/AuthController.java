@@ -24,7 +24,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // 🟢 Kullanıcı kaydı (register)
+    // Kullanıcı kaydı
     @PostMapping("/register")
     public LoginResponse register(@RequestBody RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -45,7 +45,7 @@ public class AuthController {
         return new LoginResponse(token);
     }
 
-    // 🟢 Kullanıcı girişi (login)
+    //  Kullanıcı girişi
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
         // 1. Kimlik doğrulama
